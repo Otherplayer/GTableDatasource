@@ -23,6 +23,11 @@
 
 @implementation BaseTableViewProtocol
 
+- (id)init
+{
+    return nil;
+}
+
 -(id)initWithItems:(NSArray *)aItems
     cellIdentifier:(NSString *)aCellIdentifier
   numberOfSections:(NSInteger)aSectionNumber
@@ -57,12 +62,22 @@ numberOfRowsInSectionConfigureBlock:nil
     return self.sectionNumber;
 }
 
+/// cell 点击事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectRowAtIndexPath:)]) {
         [self.delegate selectRowAtIndexPath:indexPath];
     }
+}
+
+/// cell 高度
+- (CGFloat)tableView:(nonnull UITableView *)tableView heightForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cellHeightAtIndexPath:)]) {
+        return [self.delegate cellHeightAtIndexPath:indexPath];
+    }
+    return 44;
 }
 
 #pragma mark - UITableView Datasource

@@ -16,6 +16,7 @@ static NSString * const Identifier = @"PhotoCell";
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ArrayDataSource *photosArrayDataSource;
 @property (nonatomic, strong) BaseTableViewProtocol *protocol;
+@property (nonatomic, strong) NSMutableArray *photos;
 
 @end
 
@@ -27,7 +28,7 @@ static NSString * const Identifier = @"PhotoCell";
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];
-    NSArray *photos = @[@"asdfa",@"safd",@"adfs",@"safd",@"adfs",@"safd",@"adfs"];
+    self.photos = [[NSMutableArray alloc] initWithArray:@[@"asdfa",@"safd",@"adfs",@"safd",@"adfs",@"safd",@"adfs"]];
     
 //    TableViewCellConfigureBlock configureCell = ^(UITableViewCell *cell, NSString *photo) {
 //        [cell.textLabel setText:photo];
@@ -40,23 +41,45 @@ static NSString * const Identifier = @"PhotoCell";
 //    [self.tableView setDelegate:self];
 //
 //
+    
+    
+    
     TableViewCellConfigurate configure = ^(UITableViewCell *cell, NSString *entity, NSIndexPath *indexPath) {
         [cell.textLabel setText:entity];
         cell.textLabel.textColor = [UIColor redColor];
     };
     
-    self.protocol = [[BaseTableViewProtocol alloc] initWithItems:photos cellIdentifier:Identifier cellConfigureBlock:configure];
+    self.protocol = [[BaseTableViewProtocol alloc] initWithItems:self.photos cellIdentifier:Identifier cellConfigureBlock:configure];
     [self.protocol setDelegate:self];
     
     self.tableView.dataSource = self.protocol;
     self.tableView.delegate = self.protocol;
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:Identifier];
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 - (BOOL)isCellEditable{
     return YES;
 }
+- (void)selectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"%ld",indexPath.row);
+}
+- (CGFloat)cellHeightAtIndexPath:(NSIndexPath *)indexPath{
+    return 100;
+}
+- (void)deleteRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.photos removeObjectAtIndex:indexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+}
+
 
 // Called after the user changes the selection.
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

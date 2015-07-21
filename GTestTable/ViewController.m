@@ -43,24 +43,46 @@ static NSString * const Identifier = @"PhotoCell";
 //
     
     
+//    TableViewCellConfigurate configure = ^(UITableViewCell *cell, NSString *entity, NSIndexPath *indexPath) {
+//        if (indexPath.section == 0) {
+//            [cell.textLabel setTextColor:[UIColor greenColor]];
+//        }else{
+//            cell.textLabel.textColor = [UIColor redColor];
+//        }
+//        [cell.textLabel setText:entity];
+//    };
     
-    TableViewCellConfigurate configure = ^(UITableViewCell *cell, NSString *entity, NSIndexPath *indexPath) {
+    
+    
+    
+//    self.protocol = [[BaseTableViewProtocol alloc] initWithItems:self.photos cellIdentifier:Identifier cellConfigureBlock:configure];
+    
+    
+    
+    self.protocol = [[BaseTableViewProtocol alloc] initWithItems:self.photos cellIdentifier:Identifier numberOfSections:2 numberOfRowsInSectionConfigureBlock:^NSInteger(NSInteger section) {
+        if (section == 1) {
+            return 3;
+        }else{
+            return 2;
+        }
+    } cellConfigureBlock:^(UITableViewCell *cell, id entity, NSIndexPath *indexPath) {
+        if (indexPath.section == 0) {
+            [cell.textLabel setTextColor:[UIColor greenColor]];
+        }else{
+            cell.textLabel.textColor = [UIColor redColor];
+        }
         [cell.textLabel setText:entity];
-        cell.textLabel.textColor = [UIColor redColor];
-    };
+    }];
     
-    self.protocol = [[BaseTableViewProtocol alloc] initWithItems:self.photos cellIdentifier:Identifier cellConfigureBlock:configure];
+    
+    
+    
     [self.protocol setDelegate:self];
     
     self.tableView.dataSource = self.protocol;
     self.tableView.delegate = self.protocol;
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:Identifier];
-    
-    
-    
-    
-    
     
     
     
